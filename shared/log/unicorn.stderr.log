@@ -1,0 +1,9 @@
+I, [2017-08-14T08:56:00.455383 #12833]  INFO -- : Refreshing Gem list
+I, [2017-08-14T08:56:02.449557 #12833]  INFO -- : listening on addr=/home/tranthuc/appname/shared/sockets/unicorn.sock fd=11
+I, [2017-08-14T08:56:02.449835 #12833]  INFO -- : worker=0 spawning...
+I, [2017-08-14T08:56:02.452140 #12833]  INFO -- : worker=1 spawning...
+I, [2017-08-14T08:56:02.453119 #12836]  INFO -- : worker=0 spawned pid=12836
+I, [2017-08-14T08:56:02.453294 #12836]  INFO -- : worker=0 ready
+I, [2017-08-14T08:56:02.454975 #12833]  INFO -- : master process ready
+I, [2017-08-14T08:56:02.460600 #12839]  INFO -- : worker=1 spawned pid=12839
+I, [2017-08-14T08:56:02.460816 #12839]  INFO -- : worker=1 ready
