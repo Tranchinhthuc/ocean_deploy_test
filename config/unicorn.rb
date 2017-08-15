@@ -1,4 +1,4 @@
-root = "/home/tranthuc/apps/ocean_deploy_test/current"
+root = "/home/tranthuc/apps/ocean_deploy_test/"
 working_directory root
 #pid của unicorn khi chạy
 pid "#{root}/tmp/pids/unicorn.pid"
