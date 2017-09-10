@@ -39,7 +39,7 @@ class Order < ApplicationRecord
   def update_product_info
     product = Product.find_by(code: product_code)
     if product
-      product.update(remain_quantity: product.remain_quantity - order_colors.map(&:quantity).try(:sum))
+      # product.update(remain_quantity: product.remain_quantity - order_colors.map(&:quantity).try(:sum))
       product_order_colors = product.order_colors
       import_order_colors = order_colors
       order_colors.each do |order_color|

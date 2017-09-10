@@ -34,7 +34,7 @@
           %td= product.code
           %td= product.cost
           %td= product.bought_quantity
-          %td= product.bought_quantity - product.order_colors.map(&:quantity).try(:sum)
+          %td= product.bought_quantity.to_i - product.order_colors.map(&:quantity).try(:sum)
           %td= product.order_colors.map(&:quantity).try(:sum)
           %td= product.colors_to_s
           %td

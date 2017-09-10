@@ -28,6 +28,7 @@ class ExcelExporter
     (0..22).each do |col|
       daily_sheet.change_column_font_size(col, 12)
       daily_sheet.change_column_font_name(col, 'Times New Roman')
+      daily_sheet.change_column_width(col, 15)
     end
 
     daily_sheet.add_cell(2, 4, "Hàng bán trong ngày #{report_date.strftime('%d/%m/%Y')}".upcase)
@@ -108,6 +109,7 @@ class ExcelExporter
     (0..12).each do |col|
       balo_sheet.change_column_font_size(col, 12)
       balo_sheet.change_column_font_name(col, 'Times New Roman')
+      balo_sheet.change_column_width(col, 15)
     end
 
     balo_sheet.change_column_width(0, 0)
@@ -198,6 +200,7 @@ class ExcelExporter
     (0..12).each do |col|
       purge_sheet.change_column_font_size(col, 12)
       purge_sheet.change_column_font_name(col, 'Times New Roman')
+      purge_sheet.change_column_width(col, 15)
     end
 
     purge_sheet.add_cell(1, 4, "Thống kê hàng #{report_date.strftime('%d/%m/%Y')}".upcase)
@@ -286,6 +289,7 @@ class ExcelExporter
     (0..12).each do |col|
       import_sheet.change_column_font_size(col, 12)
       import_sheet.change_column_font_name(col, 'Times New Roman')
+      import_sheet.change_column_width(col, 15)
     end
 
     import_sheet.add_cell(1, 1, "BẢNG THỐNG KÊ NHẬP HÀNG THÁNG #{report_date.month}".upcase)
@@ -375,6 +379,7 @@ class ExcelExporter
     (0..12).each do |col|
       repay_sheet.change_column_font_size(col, 12)
       repay_sheet.change_column_font_name(col, 'Times New Roman')
+      repay_sheet.change_column_width(col, 15)
     end
 
     repay_sheet.add_cell(2, 3, "Thông tin hàng trả".upcase)
@@ -430,6 +435,7 @@ class ExcelExporter
     (0..12).each do |col|
       balo_monthly_sheet.change_column_font_size(col, 12)
       balo_monthly_sheet.change_column_font_name(col, 'Times New Roman')
+      balo_monthly_sheet.change_column_width(col, 15)
     end
 
     balo_monthly_sheet.add_cell(3, 1, "Thông tin khách hàng".upcase)
@@ -520,6 +526,7 @@ class ExcelExporter
     (0..12).each do |col|
       purge_monthly_sheet.change_column_font_size(col, 12)
       purge_monthly_sheet.change_column_font_name(col, 'Times New Roman')
+      purge_monthly_sheet.change_column_width(col, 15)
     end
 
     purge_monthly_sheet.add_cell(3, 1, "Thông tin khách hàng".upcase)
