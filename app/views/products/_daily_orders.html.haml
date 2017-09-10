@@ -1,0 +1,13 @@
+.scroll-table
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th STT
+        %th Mã SP
+        %th Số lượng
+    %tbody
+      - orders.each.with_index do |order, index|
+        %tr
+          %td= index + 1
+          %td= order[0]
+          %td= order[1]

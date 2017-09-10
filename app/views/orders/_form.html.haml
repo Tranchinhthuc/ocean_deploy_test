@@ -1,0 +1,53 @@
+= render 'share/error_messages', object: @order
+.form-group
+  = f.label :product_type, 'Loại mặt hàng', class: 'control-label col-sm-2'
+  .col-sm-10
+    - if params[:product_type]
+      = f.label :product_type, Order.product_type_to_s(params[:product_type].to_sym),
+        autofocus: true, class: "form-control"
+      = f.hidden_field :product_type, value: params[:product_type]
+    - else
+      = f.select :product_type, Order.product_type_attribute_for_select, class: "form-control"
+
+.form-group
+  = f.label :customer_name, 'Tên khách', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :customer_name, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :product_code, 'Mã SP', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :product_code, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :ship_code, 'Mã code',class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :ship_code, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :product_cost, 'Gía SP', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :product_cost, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :ship_cost, 'Gía ship', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :ship_cost, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :customer_phone, 'Số ĐT', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :customer_phone, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :sent_date, 'Ngày gửi', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :sent_date, autofocus: true, class: "form-control datepicker"
+
+= f.fields_for :order_colors do |builder|
+  = render "order_color_form", f: builder
+
+.form-group
+  .col-sm-2
+  .col-sm-10
+    = link_to_add_fields "Thêm màu", f, :order_colors

@@ -1,0 +1,35 @@
+= render 'share/error_messages', object: @product
+.form-group
+  = f.label :product_type, 'Loại mặt hàng', class: 'control-label col-sm-2'
+  .col-sm-10
+    - if params[:product_type]
+      = f.label :product_type, ImportOrder.product_type_to_s(params[:product_type].to_sym),
+        autofocus: true, class: "form-control"
+      = f.hidden_field :product_type, value: params[:product_type]
+    - else
+      = f.select :product_type, ImportOrder.product_type_attribute_for_select, {}, {class: "form-control"}
+.form-group
+  = f.label :code, 'Mã SP', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :code, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :cost, 'Giá',class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :cost, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :bought_quantity, 'Số lượng nhập về', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :bought_quantity, autofocus: true, class: "form-control"
+
+.form-group
+  = f.label :bought_quantity, 'Số lượng tồn', class: 'control-label col-sm-2'
+
+= f.fields_for :order_colors do |builder|
+  = render "order_color_form", f: builder
+
+.form-group
+  .col-sm-2
+  .col-sm-10
+    = link_to_add_fields "Thêm màu", f, :order_colors

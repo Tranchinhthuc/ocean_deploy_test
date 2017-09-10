@@ -1,0 +1,7 @@
+.fields
+  .form-group
+    .col-sm-2
+    .col-sm-10
+      = f.text_field :color, placeholder: "Màu"
+      = f.number_field :quantity, placeholder: "Số lượng", min: 1
+      = link_to_remove_fields "Remove", f

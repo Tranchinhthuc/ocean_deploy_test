@@ -1,0 +1,33 @@
+= render 'share/error_messages', object: @repay
+.form-group
+  = f.label :customer_phone, 'Khách hàng', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :customer_phone, autofocus: true, class: "form-control", required: true
+
+.form-group
+  = f.label :product_code, 'Mã SP', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :product_code, autofocus: true, class: "form-control", required: true
+
+.form-group
+  = f.label :sent_date, 'Ngày gửi', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :sent_date, autofocus: true, class: "form-control datepicker", required: true
+
+.form-group
+  = f.label :repay_date, 'Ngày trả', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :repay_date, autofocus: true, class: "form-control datepicker", required: true
+
+.form-group
+  = f.label :product_status, 'Trạng thái sản phẩm', class: 'control-label col-sm-2'
+  .col-sm-10
+    = f.text_field :product_status, autofocus: true, class: "form-control", required: true
+
+= f.fields_for :order_colors do |builder|
+  = render "order_color_form", f: builder
+
+.form-group
+  .col-sm-2
+  .col-sm-10
+    = link_to_add_fields "Thêm màu", f, :order_colors

@@ -10,6 +10,27 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery
+//= require bootstrap
+//= require jquery.turbolinks
 //= require rails-ujs
 //= require turbolinks
-//= require_tree .
+//= require bootstrap-datepicker
+
+$(document).on('turbolinks:load', function () {
+  $('.datepicker').datepicker({
+    autoclose: true,
+    format: "yyyy/mm/dd"
+  });
+});
+
+function remove_fields(link) {
+  $(link).prev("input[type=hidden]").val("1");
+  $(link).closest(".fields").hide();
+}
+
+function add_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  $(link).closest(".form-group").prev().before(content.replace(regexp, new_id));
+}

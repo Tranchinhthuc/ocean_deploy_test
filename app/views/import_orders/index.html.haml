@@ -1,0 +1,42 @@
+%h1 Hàng nhập
+-# = search_form_for @q, url: orders_path, html: { method: :get, class: 'form-inline' } do |f|
+-#   .form-group
+-#     = f.label 'code', '顧客ID'
+-#     = f.search_field 'code_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'name'
+-#     = f.search_field 'name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'display_name'
+-#     = f.search_field 'display_name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'status', 'ステータス'
+-#     = f.select :status_eq, order.e_statuses.values,
+-#       { include_blank: true }, {class: 'form-control'}
+-#   = submit_tag '検索', class: 'btn btn-primary'
+%br/
+
+%p
+  = link_to 'Add more', new_import_order_path, class: 'btn btn-primary'
+.scroll-table
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th Ngày
+        %th Mã SP
+        %th Số lượng
+        %th Màu
+        %th Actions
+    %tbody
+      - @import_orders.each.with_index do |import_order, index|
+        %tr
+          %td= import_order.import_date
+          %td= import_order.product_code
+          %td= import_order.order_colors.map(&:quantity).try(:sum)
+          %td= import_order.colors_to_s
+          %td
+            = link_to 'Show', import_order_path(import_order)
+            |
+            = link_to 'Edit', edit_import_order_path(import_order)
+            |
+            = link_to('Delete', import_order_path(import_order), method: :delete, data: {confirm: 'Are you sure?'})

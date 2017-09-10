@@ -1,0 +1,47 @@
+%h1 Hàng trả
+-# = search_form_for @q, url: orders_path, html: { method: :get, class: 'form-inline' } do |f|
+-#   .form-group
+-#     = f.label 'code', '顧客ID'
+-#     = f.search_field 'code_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'name'
+-#     = f.search_field 'name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'display_name'
+-#     = f.search_field 'display_name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'status', 'ステータス'
+-#     = f.select :status_eq, order.e_statuses.values,
+-#       { include_blank: true }, {class: 'form-control'}
+-#   = submit_tag '検索', class: 'btn btn-primary'
+%br/
+%p
+  = link_to 'Add more', new_repay_path, class: 'btn btn-primary'
+.scroll-table
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th Khách hàng
+        %th Mã SP
+        %th Ngày gửi
+        %th Ngày trả
+        %th Số lượng
+        %th Tình trạng
+        %th Ghi chú
+        %th Actions
+    %tbody
+      - @repays.each.with_index do |repay, index|
+        %tr
+          %td= repay.customer_phone
+          %td= repay.product_code
+          %td= repay.sent_date
+          %td= repay.repay_date
+          %td= repay.order_colors.map(&:quantity).try(:sum)
+          %td= repay.product_status
+          %td= repay.colors_to_s
+          %td
+            = link_to 'Show', repay_path(repay)
+            |
+            = link_to 'Edit', edit_repay_path(repay)
+            |
+            = link_to('Delete', repay_path(repay), method: :delete, data: {confirm: 'Are you sure?'})

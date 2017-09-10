@@ -1,0 +1,54 @@
+%h1 Project details
+
+%p= link_to 'Back to list', admin_projects_path
+= link_to 'Edit', edit_admin_project_path(@project), class: 'btn btn-primary'
+= link_to 'Delete', admin_project_path(@project), method: :delete,
+  data: {confirm: 'Are you sure?'}, class: 'btn btn-danger'
+%table.table
+  %thead
+    %tr
+      %th
+      %th
+  %tbody
+    %tr
+      %td.text-muted Name
+      %td= @project.name
+    %tr
+      %td.text-muted Borrower
+      %td= @project.borrower.try(:name)
+    %tr
+      %td.text-muted Loan Amount
+      %td= @project.loan_amount
+    %tr
+      %td.text-muted Payment Way
+      %td= @project.payment_way
+    %tr
+      %td.text-muted Contract Date
+      %td= @project.contract_date.strftime("%Y/%m/%d")
+    %tr
+      %td.text-muted Loan Start Date
+      %td= @project.loan_start_date.strftime("%Y/%m/%d")
+    %tr
+      %td.text-muted Loan End Date
+      %td= @project.loan_end_date.strftime("%Y/%m/%d")
+    %tr
+      %td.text-muted payment_due
+      %td= @project.payment_due
+    %tr
+      %td.text-muted Loan Term
+      %td= @project.loan_term
+    %tr
+      %td.text-muted Lending Rate
+      %td= @project.lending_rate
+    %tr
+      %td.text-muted Rate Of Yield
+      %td= @project.rate_of_yield
+    %tr
+      %td.text-muted Handling Fee
+      %td= @project.handling_fee
+    %tr
+      %td.text-muted Charge Rate
+      %td= @project.charge_rate
+    %tr
+      %td.text-muted Late Charge Rate
+      %td= @project.late_charge_rate

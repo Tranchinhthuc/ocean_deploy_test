@@ -1,0 +1,45 @@
+-# = search_form_for @q, url: products_path, html: { method: :get, class: 'form-inline' } do |f|
+-#   .form-group
+-#     = f.label 'code', '顧客ID'
+-#     = f.search_field 'code_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'name'
+-#     = f.search_field 'name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'display_name'
+-#     = f.search_field 'display_name_cont', {class: 'form-control'}
+-#   .form-group
+-#     = f.label 'status', 'ステータス'
+-#     = f.select :status_eq, product.e_statuses.values,
+-#       { include_blank: true }, {class: 'form-control'}
+-#   = submit_tag '検索', class: 'btn btn-primary'
+%br/
+
+%p
+  = link_to 'Add more', new_product_path(product_type: product_type), class: 'btn btn-primary'
+.scroll-table
+  %table.table.table-striped.table-bproducted
+    %thead
+      %tr
+        %th Mã SP
+        %th Gía
+        %th Số lượng
+        %th Số lượng bán
+        %th Còn lại
+        %th Ghi chú
+        %th Actions
+    %tbody
+      - @products.each.with_index do |product, index|
+        %tr
+          %td= product.code
+          %td= product.cost
+          %td= product.bought_quantity
+          %td= product.bought_quantity - product.order_colors.map(&:quantity).try(:sum)
+          %td= product.order_colors.map(&:quantity).try(:sum)
+          %td= product.colors_to_s
+          %td
+            = link_to 'Show', product_path(product)
+            |
+            = link_to 'Edit', edit_product_path(product)
+            |
+            = link_to('Delete', product_path(product), method: :delete, data: {confirm: 'Are you sure?'})

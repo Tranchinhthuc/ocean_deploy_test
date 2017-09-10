@@ -1,0 +1,10 @@
+.row
+  .col-sm-10.col-sm-offset-1
+    %h2 Edit
+
+    = form_for(@repay, html: {class: 'form-horizontal'}) do |f|
+      = render 'form', f: f
+
+      .form-group
+        .col-sm-offset-2.col-sm-10
+          = f.submit "Update", class: 'btn btn-primary'
