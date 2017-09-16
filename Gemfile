@@ -27,6 +27,7 @@ gem 'jquery-rails'
 gem 'haml-rails'
 gem 'erb2haml'
 gem "rubyXL"
+gem "roo", "~> 2.7.0"
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

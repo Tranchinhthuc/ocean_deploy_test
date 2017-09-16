@@ -1,11 +1,11 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
   def balo
-    @orders = Order.balo
+    @orders = Order.includes(:order_colors).balo
   end
 
   def purge
-    @orders = Order.purge
+    @orders = Order.includes(:order_colors).purge
   end
 
   def daily
@@ -28,10 +28,18 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       format.xlsx do
-        send_data ExcelExporter.export_daily_report(report_date),
+        send_data ExcelHandler.export_daily_report(report_date),
           filename: "#{Date.today.strftime('%d/%m/%Y')}.xlsx"
       end
     end
+  end
+
+  def import_post
+    ExcelHandler.import_excel(params[:file])
+    redirect_to balo_products_path, notice: "Data imported."
+  end
+
+  def import_get
   end
 
   def index

@@ -1,11 +1,11 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   def balo
-    @products = Product.balo
+    @products = Product.includes(:order_colors).balo
   end
 
   def purge
-    @products = Product.purge
+    @products = Product.includes(:order_colors).purge
   end
 
   def daily

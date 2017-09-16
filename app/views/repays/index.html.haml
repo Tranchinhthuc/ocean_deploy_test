@@ -38,7 +38,7 @@
           %td= repay.repay_date
           %td= repay.order_colors.map(&:quantity).try(:sum)
           %td= repay.product_status
-          %td= repay.colors_to_s
+          %td= repay.note
           %td
             = link_to 'Show', repay_path(repay)
             |

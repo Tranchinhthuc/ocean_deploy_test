@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     get 'purge', on: :collection
     get 'daily', on: :collection
     get 'download', on: :collection
+    post 'import_post', on: :collection
+    get 'import_get', on: :collection
   end
 
   resources :repays

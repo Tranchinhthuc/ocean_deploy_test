@@ -1,5 +1,164 @@
-class ExcelExporter
+class ExcelHandler
   require 'rubyXL'
+
+  def self.import_excel(file)
+    Product.destroy_all
+    ImportOrder.destroy_all
+    Repay.destroy_all
+    Order.destroy_all
+    workbook = open_spreadsheet(file)
+    balo_sheet = 1
+    purge_sheet = 2
+    import_sheet = 3
+    repay_sheet = 4
+    balo_monthly_sheet = 5
+    purge_monthly_sheet = 6
+
+    (5..workbook.sheet(balo_sheet).last_row).each do |i|
+      product = Product.new
+      product.code = workbook.sheet(balo_sheet).row(i)[1]
+      product.cost = workbook.sheet(balo_sheet).row(i)[3]
+      product.bought_quantity = workbook.sheet(balo_sheet).row(i)[4]
+      product.product_type = 'balo'
+
+      if product.save && workbook.sheet(balo_sheet).row(i)[7].present?
+        workbook.sheet(balo_sheet).row(i)[7].split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          product.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+    (5..workbook.sheet(purge_sheet).last_row).each do |i|
+      product = Product.new
+      product.code = workbook.sheet(purge_sheet).row(i)[1]
+      product.cost = workbook.sheet(purge_sheet).row(i)[3]
+      product.bought_quantity = workbook.sheet(purge_sheet).row(i)[4]
+      product.product_type = 'purge'
+
+      if product.save && workbook.sheet(purge_sheet).row(i)[7].present?
+        workbook.sheet(purge_sheet).row(i)[7].split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          product.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+# ImportSheet
+    (5..workbook.sheet(import_sheet).last_row).each do |i|
+      balo_import_order = ImportOrder.new
+      balo_import_order.product_code = workbook.sheet(import_sheet).row(i)[1]
+      balo_import_order.import_date = workbook.sheet(import_sheet).row(i)[0]
+      balo_import_order.product_type = 'balo'
+
+      if balo_import_order.save && workbook.sheet(import_sheet).row(i)[3].present?
+        workbook.sheet(import_sheet).row(i)[3].split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          balo_import_order.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+
+      purge_import_order = ImportOrder.new
+      purge_import_order.product_code = workbook.sheet(import_sheet).row(i)[7]
+      purge_import_order.import_date = workbook.sheet(import_sheet).row(i)[6]
+      purge_import_order.product_type = 'purge'
+
+      if purge_import_order.save && workbook.sheet(import_sheet).row(i)[9].present?
+        workbook.sheet(import_sheet).row(i)[9].split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          purge_import_order.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+
+# Repay
+    (7..workbook.sheet(repay_sheet).last_row).each do |i|
+      repay = Repay.new
+      repay.customer_phone = workbook.sheet(repay_sheet).row(i)[0]
+      repay.product_code = workbook.sheet(repay_sheet).row(i)[1]
+      repay.sent_date = workbook.sheet(repay_sheet).row(i)[2]
+      repay.repay_date = workbook.sheet(repay_sheet).row(i)[3]
+      repay.product_status = workbook.sheet(repay_sheet).row(i)[5]
+      repay.note = workbook.sheet(repay_sheet).row(i)[6]
+
+      if repay.save && workbook.sheet(repay_sheet).row(i)[4].present?
+        workbook.sheet(repay_sheet).row(i)[4].to_s.split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          repay.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+# BaloMonthlySheet
+# customer_name: string, product_code: string, ship_code: string,
+# customer_phone: string, product_cost: string, ship_cost: string,
+# sent_date: date, note: text, product_type: integer, quantity: integer,
+
+    (5..workbook.sheet(balo_monthly_sheet).last_row).each do |i|
+      order = Order.new
+      order.customer_name = workbook.sheet(balo_monthly_sheet).row(i)[1]
+      order.product_code = workbook.sheet(balo_monthly_sheet).row(i)[2]
+      order.ship_code = workbook.sheet(balo_monthly_sheet).row(i)[3]
+      order.customer_phone = workbook.sheet(balo_monthly_sheet).row(i)[4]
+      order.product_cost = workbook.sheet(balo_monthly_sheet).row(i)[5]
+      order.ship_cost = workbook.sheet(balo_monthly_sheet).row(i)[6]
+      order.sent_date = workbook.sheet(balo_monthly_sheet).row(i)[7]
+      order.product_type = 'balo'
+
+      if workbook.sheet(balo_monthly_sheet).row(i)[0].present? && order.save && workbook.sheet(balo_monthly_sheet).row(i)[7].present?
+        workbook.sheet(balo_monthly_sheet).row(i)[8].to_s.split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          order.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+    (6..workbook.sheet(purge_monthly_sheet).last_row).each do |i|
+      order = Order.new
+      order.customer_name = workbook.sheet(purge_monthly_sheet).row(i)[1]
+      order.product_code = workbook.sheet(purge_monthly_sheet).row(i)[2]
+      order.ship_code = workbook.sheet(purge_monthly_sheet).row(i)[3]
+      order.customer_phone = workbook.sheet(purge_monthly_sheet).row(i)[4]
+      order.product_cost = workbook.sheet(purge_monthly_sheet).row(i)[5]
+      order.ship_cost = workbook.sheet(purge_monthly_sheet).row(i)[6]
+      order.sent_date = workbook.sheet(purge_monthly_sheet).row(i)[7]
+      order.product_type = 'purge'
+
+      if workbook.sheet(purge_monthly_sheet).row(i)[0].present? && order.save && workbook.sheet(purge_monthly_sheet).row(i)[7].present?
+        workbook.sheet(purge_monthly_sheet).row(i)[8].to_s.split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          order.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+    end
+
+
+
+  end
+
+  def self.open_spreadsheet(file)
+      case File.extname(file.original_filename)
+          when ".csv" then Roo::CSV.new(file.path)
+          when ".xls" then Roo::Excel.new(file.path)
+          when ".xlsx" then Roo::Excelx.new(file.path)
+          else raise "Unknown file type: #{file.original_filename}"
+      end
+  end
 
   def self.export_daily_report(report_date)
 #     user = User.find_by(id: manager_evaluation.plan.staff_id)

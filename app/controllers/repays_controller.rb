@@ -2,7 +2,7 @@ class RepaysController < ApplicationController
   before_action :set_repay, only: [:show, :edit, :update, :destroy]
 
   def index
-    @repays = Repay.all
+    @repays = Repay.includes(:order_colors).all
 
     # @q = Investor.ransack(params[:q])
     # @investors = @q.result.includes(:information)

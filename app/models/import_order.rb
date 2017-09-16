@@ -9,9 +9,9 @@ class ImportOrder < ApplicationRecord
     purge: 2
   }
 
-  validate :order_color_must_be_present
+  # validate :order_color_must_be_present
 
-  after_create :update_product_info
+  # after_create :update_product_info
 
   def self.product_type_to_s(product_type)
     case product_type

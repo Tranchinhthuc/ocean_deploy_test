@@ -5,7 +5,7 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-      = link_to "Home", root_path, class: 'navbar-brand'
+      =# link_to "Home", root_path, class: 'navbar-brand'
     #myNavbar.collapse.navbar-collapse
       %ul.nav.navbar-nav.navbar-left
         %li= link_to('Hàng ngày', daily_orders_path)
@@ -17,3 +17,4 @@
         %li= link_to("Tháng #{Date.today.month} túi xách", purge_orders_path)
         %li= link_to("Quản lý tồn kho", products_path)
         %li= link_to("Download report", download_orders_path(report_date: Date.today, format: :xlsx))
+        %li= link_to("Import data", import_get_orders_path)

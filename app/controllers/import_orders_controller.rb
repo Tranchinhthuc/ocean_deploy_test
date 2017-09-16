@@ -2,7 +2,7 @@ class ImportOrdersController < ApplicationController
   before_action :set_import_order, only: [:show, :edit, :update, :destroy]
 
   def index
-    @import_orders = ImportOrder.all
+    @import_orders = ImportOrder.includes(:order_colors).all
 
     # @q = Investor.ransack(params[:q])
     # @investors = @q.result.includes(:information)
