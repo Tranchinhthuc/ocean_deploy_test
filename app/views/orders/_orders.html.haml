@@ -30,6 +30,9 @@
         %th Tiền Ship
         %th Ngày gửi
         %th Ghi chú
+        %th Customer Email
+        %th Customer Birthday
+        %th Customer address
         %th Actions
     %tbody
       - @orders.each.with_index do |order, index|
@@ -43,6 +46,9 @@
           %td= order.ship_cost
           %td= order.sent_date
           %td= order.colors_to_s
+          %td= order.customer_email
+          %td= order.customer_birthday
+          %td= order.customer_address
           %td
             = link_to 'Show', order_path(order)
             |

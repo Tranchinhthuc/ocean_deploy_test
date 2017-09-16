@@ -81,6 +81,18 @@ class OrdersController < ApplicationController
     end
 
     if @order.save
+      product = Product.find_by(code: @order.product_code)
+      if product
+        # product.update(remain_quantity: product.remain_quantity - order_colors.map(&:quantity).try(:sum))
+        product_order_colors = product.order_colors
+        import_order_colors = @order.order_colors
+        @order.order_colors.each do |order_color|
+          pc = product_order_colors.find{|c| c.color.downcase == order_color.color.downcase}
+          pc.update(quantity: pc.quantity - order_color.quantity) if pc
+        end
+      end
+
+
       flash[:notice] = "Created"
       if params[:commit] == "Add and Continue"
         redirect_back(fallback_location: root_path, product_type: params[:order][:product_type])

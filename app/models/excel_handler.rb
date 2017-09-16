@@ -21,14 +21,30 @@ class ExcelHandler
       product.bought_quantity = workbook.sheet(balo_sheet).row(i)[4]
       product.product_type = 'balo'
 
-      if product.save && workbook.sheet(balo_sheet).row(i)[7].present?
-        workbook.sheet(balo_sheet).row(i)[7].split(",").each do |order_color|
+      if workbook.sheet(balo_sheet).row(i)[0].present? && workbook.sheet(balo_sheet).row(i)[1].present? && product.save && workbook.sheet(balo_sheet).row(i)[7].present?
+        workbook.sheet(balo_sheet).row(i)[7].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
 
           product.order_colors.create(color: color, quantity: quantity)
         end
       end
+
+      student_product = Product.new
+      student_product.code = workbook.sheet(balo_sheet).row(i)[9]
+      student_product.cost = workbook.sheet(balo_sheet).row(i)[11]
+      student_product.bought_quantity = workbook.sheet(balo_sheet).row(i)[12]
+      student_product.product_type = 'student_balo'
+
+      if workbook.sheet(balo_sheet).row(i)[9].present? && workbook.sheet(balo_sheet).row(i)[9].downcase.start_with?('h') && workbook.sheet(balo_sheet).row(i)[11].present? && student_product.save && workbook.sheet(balo_sheet).row(i)[15].present?
+        workbook.sheet(balo_sheet).row(i)[15].to_s.split(",").each do |order_color|
+          color = order_color.gsub(/\d+/, "").strip
+          quantity = order_color[/\d+/]
+
+          student_product.order_colors.create(color: color, quantity: quantity)
+        end
+      end
+
     end
 
     (5..workbook.sheet(purge_sheet).last_row).each do |i|
@@ -38,8 +54,8 @@ class ExcelHandler
       product.bought_quantity = workbook.sheet(purge_sheet).row(i)[4]
       product.product_type = 'purge'
 
-      if product.save && workbook.sheet(purge_sheet).row(i)[7].present?
-        workbook.sheet(purge_sheet).row(i)[7].split(",").each do |order_color|
+      if workbook.sheet(purge_sheet).row(i)[1].present? && workbook.sheet(purge_sheet).row(i)[3].present? && product.save && workbook.sheet(purge_sheet).row(i)[7].present?
+        workbook.sheet(purge_sheet).row(i)[7].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
 
@@ -55,8 +71,8 @@ class ExcelHandler
       balo_import_order.import_date = workbook.sheet(import_sheet).row(i)[0]
       balo_import_order.product_type = 'balo'
 
-      if balo_import_order.save && workbook.sheet(import_sheet).row(i)[3].present?
-        workbook.sheet(import_sheet).row(i)[3].split(",").each do |order_color|
+      if workbook.sheet(import_sheet).row(i)[0].present? && workbook.sheet(import_sheet).row(i)[1].present? && balo_import_order.save && workbook.sheet(import_sheet).row(i)[3].present?
+        workbook.sheet(import_sheet).row(i)[3].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
 
@@ -69,8 +85,8 @@ class ExcelHandler
       purge_import_order.import_date = workbook.sheet(import_sheet).row(i)[6]
       purge_import_order.product_type = 'purge'
 
-      if purge_import_order.save && workbook.sheet(import_sheet).row(i)[9].present?
-        workbook.sheet(import_sheet).row(i)[9].split(",").each do |order_color|
+      if workbook.sheet(import_sheet).row(i)[6].present? && workbook.sheet(import_sheet).row(i)[7].present? && purge_import_order.save && workbook.sheet(import_sheet).row(i)[9].present?
+        workbook.sheet(import_sheet).row(i)[9].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
 
@@ -90,7 +106,7 @@ class ExcelHandler
       repay.product_status = workbook.sheet(repay_sheet).row(i)[5]
       repay.note = workbook.sheet(repay_sheet).row(i)[6]
 
-      if repay.save && workbook.sheet(repay_sheet).row(i)[4].present?
+      if workbook.sheet(repay_sheet).row(i)[1].present? && workbook.sheet(repay_sheet).row(i)[1].present? && repay.save && workbook.sheet(repay_sheet).row(i)[4].present?
         workbook.sheet(repay_sheet).row(i)[4].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
@@ -114,9 +130,12 @@ class ExcelHandler
       order.product_cost = workbook.sheet(balo_monthly_sheet).row(i)[5]
       order.ship_cost = workbook.sheet(balo_monthly_sheet).row(i)[6]
       order.sent_date = workbook.sheet(balo_monthly_sheet).row(i)[7]
+      order.customer_email = workbook.sheet(balo_monthly_sheet).row(i)[9]
+      order.customer_birthday = workbook.sheet(balo_monthly_sheet).row(i)[10]
+      order.customer_address = workbook.sheet(balo_monthly_sheet).row(i)[11]
       order.product_type = 'balo'
 
-      if workbook.sheet(balo_monthly_sheet).row(i)[0].present? && order.save && workbook.sheet(balo_monthly_sheet).row(i)[7].present?
+      if workbook.sheet(balo_monthly_sheet).row(i)[0].present? && workbook.sheet(balo_monthly_sheet).row(i)[1].present? && order.save && workbook.sheet(balo_monthly_sheet).row(i)[8].present?
         workbook.sheet(balo_monthly_sheet).row(i)[8].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
@@ -135,9 +154,12 @@ class ExcelHandler
       order.product_cost = workbook.sheet(purge_monthly_sheet).row(i)[5]
       order.ship_cost = workbook.sheet(purge_monthly_sheet).row(i)[6]
       order.sent_date = workbook.sheet(purge_monthly_sheet).row(i)[7]
+      order.customer_email = workbook.sheet(purge_monthly_sheet).row(i)[9]
+      order.customer_birthday = workbook.sheet(purge_monthly_sheet).row(i)[10]
+      order.customer_address = workbook.sheet(purge_monthly_sheet).row(i)[11]
       order.product_type = 'purge'
 
-      if workbook.sheet(purge_monthly_sheet).row(i)[0].present? && order.save && workbook.sheet(purge_monthly_sheet).row(i)[7].present?
+      if workbook.sheet(purge_monthly_sheet).row(i)[0].present? && workbook.sheet(purge_monthly_sheet).row(i)[1].present? && order.save && workbook.sheet(purge_monthly_sheet).row(i)[8].present?
         workbook.sheet(purge_monthly_sheet).row(i)[8].to_s.split(",").each do |order_color|
           color = order_color.gsub(/\d+/, "").strip
           quantity = order_color[/\d+/]
@@ -146,9 +168,6 @@ class ExcelHandler
         end
       end
     end
-
-
-
   end
 
   def self.open_spreadsheet(file)
@@ -265,7 +284,7 @@ class ExcelHandler
     end
 
   # BaloSheet
-    (0..12).each do |col|
+    (0..20).each do |col|
       balo_sheet.change_column_font_size(col, 12)
       balo_sheet.change_column_font_name(col, 'Times New Roman')
       balo_sheet.change_column_width(col, 15)
@@ -333,6 +352,57 @@ class ExcelHandler
     balo_sheet.sheet_data[3][11].change_font_color('ffffff')
     balo_sheet.change_column_width(11, 30)
 
+
+    balo_sheet.add_cell(3, 13, "STT")
+    balo_sheet.sheet_data[3][13].change_fill('f48630')
+    balo_sheet.sheet_data[3][13].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][13].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][13].change_font_bold(true)
+    balo_sheet.sheet_data[3][13].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 14, "Mã SP")
+    balo_sheet.sheet_data[3][14].change_fill('f48630')
+    balo_sheet.sheet_data[3][14].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][14].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][14].change_font_bold(true)
+    balo_sheet.sheet_data[3][14].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 15, "Ảnh")
+    balo_sheet.sheet_data[3][15].change_fill('f48630')
+    balo_sheet.sheet_data[3][15].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][15].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][15].change_font_bold(true)
+    balo_sheet.sheet_data[3][15].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 16, "Giá")
+    balo_sheet.sheet_data[3][16].change_fill('f48630')
+    balo_sheet.sheet_data[3][16].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][16].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][16].change_font_bold(true)
+    balo_sheet.sheet_data[3][16].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 17, "Số lượng")
+    balo_sheet.sheet_data[3][17].change_fill('f48630')
+    balo_sheet.sheet_data[3][17].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][17].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][17].change_font_bold(true)
+    balo_sheet.sheet_data[3][17].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 18, "Bán")
+    balo_sheet.sheet_data[3][18].change_fill('f48630')
+    balo_sheet.sheet_data[3][18].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][18].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][18].change_font_bold(true)
+    balo_sheet.sheet_data[3][18].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 19, "Tồn")
+    balo_sheet.sheet_data[3][19].change_fill('f48630')
+    balo_sheet.sheet_data[3][19].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][19].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][19].change_font_bold(true)
+    balo_sheet.sheet_data[3][19].change_font_color('ffffff')
+    balo_sheet.add_cell(3, 20, "Ghi chú")
+    balo_sheet.sheet_data[3][20].change_fill('f48630')
+    balo_sheet.sheet_data[3][20].change_horizontal_alignment('center')
+    balo_sheet.sheet_data[3][20].change_vertical_alignment('center')
+    balo_sheet.sheet_data[3][20].change_font_bold(true)
+    balo_sheet.sheet_data[3][20].change_font_color('ffffff')
+    balo_sheet.change_column_width(20, 30)
+
     products = Product.balo
     products.each.with_index do |product, index|
       balo_sheet.add_cell(4 + index, 4, index + 1)
@@ -340,14 +410,26 @@ class ExcelHandler
       balo_sheet.add_cell(4 + index, 6, "")
       balo_sheet.add_cell(4 + index, 7, product.cost)
       balo_sheet.add_cell(4 + index, 8, product.bought_quantity)
-      balo_sheet.add_cell(4 + index, 9, product.bought_quantity - product.order_colors.map(&:quantity).try(:sum))
+      balo_sheet.add_cell(4 + index, 9, product.bought_quantity.to_i - product.order_colors.map(&:quantity).try(:sum))
       balo_sheet.add_cell(4 + index, 10, product.order_colors.map(&:quantity).try(:sum))
       balo_sheet.add_cell(4 + index, 11, product.colors_to_s)
     end
 
+    student_products = Product.student_balo
+    student_products.each.with_index do |product, index|
+      balo_sheet.add_cell(4 + index, 13, index + 1)
+      balo_sheet.add_cell(4 + index, 14, product.code)
+      balo_sheet.add_cell(4 + index, 15, "")
+      balo_sheet.add_cell(4 + index, 16, product.cost)
+      balo_sheet.add_cell(4 + index, 17, product.bought_quantity)
+      balo_sheet.add_cell(4 + index, 18, product.bought_quantity.to_i - product.order_colors.map(&:quantity).try(:sum))
+      balo_sheet.add_cell(4 + index, 19, product.order_colors.map(&:quantity).try(:sum))
+      balo_sheet.add_cell(4 + index, 20, product.colors_to_s)
+    end
+
     (products.count + 8).times do |row|
       balo_sheet.change_row_height(row, 24)
-      12.times do |col|
+      21.times do |col|
         balo_sheet.sheet_data[row][col].try(:change_border, :top, 'thin')
         balo_sheet.sheet_data[row][col].try(:change_border, :bottom, 'thin')
         balo_sheet.sheet_data[row][col].try(:change_border, :left, 'thin')
@@ -426,10 +508,10 @@ class ExcelHandler
     products.each.with_index do |product, index|
       purge_sheet.add_cell(4 + index, 4, index + 1)
       purge_sheet.add_cell(4 + index, 5, product.code)
-      purge_sheet.add_cell(4 + index, 6, "Anh")
+      purge_sheet.add_cell(4 + index, 6, "")
       purge_sheet.add_cell(4 + index, 7, product.cost)
       purge_sheet.add_cell(4 + index, 8, product.bought_quantity)
-      purge_sheet.add_cell(4 + index, 9, product.bought_quantity - product.order_colors.map(&:quantity).try(:sum))
+      purge_sheet.add_cell(4 + index, 9, product.bought_quantity.to_i - product.order_colors.map(&:quantity).try(:sum))
       purge_sheet.add_cell(4 + index, 10, product.order_colors.map(&:quantity).try(:sum))
       purge_sheet.add_cell(4 + index, 11, product.colors_to_s)
     end
@@ -505,19 +587,19 @@ class ExcelHandler
     import_sheet.change_column_width(4, 20)
     import_sheet.change_column_width(9, 20)
 
-    import_orders = ImportOrder.all.select{|o| o.import_date.month == report_date.month }
+    import_orders = ImportOrder.all.select{|o| o.import_date.try(:month) == report_date.month }
     balos = import_orders.select{|o| o.product_type == 'balo' }
-    purges = import_orders.select{|o| o.product_type == 'purges' }
+    purges = import_orders.select{|o| o.product_type == 'purge' }
 
     balos.each.with_index do |import_order, index|
-      import_sheet.add_cell(4 + index, 1, import_order.import_date.strftime('%d/%m'))
+      import_sheet.add_cell(4 + index, 1, import_order.import_date.try(:strftime, '%d/%m'))
       import_sheet.add_cell(4 + index, 2, import_order.product_code)
       import_sheet.add_cell(4 + index, 3, import_order.order_colors.map(&:quantity).try(:sum))
       import_sheet.add_cell(4 + index, 4, import_order.colors_to_s)
     end
 
     purges.each.with_index do |import_order, index|
-      import_sheet.add_cell(4 + index, 6, import_order.import_date.strftime('%d/%m'))
+      import_sheet.add_cell(4 + index, 6, import_order.import_date.try(:strftime, '%d/%m'))
       import_sheet.add_cell(4 + index, 7, import_order.product_code)
       import_sheet.add_cell(4 + index, 8, import_order.order_colors.map(&:quantity).try(:sum))
       import_sheet.add_cell(4 + index, 9, import_order.colors_to_s)
@@ -568,13 +650,13 @@ class ExcelHandler
     repay_sheet.change_column_width(3, 25)
     repay_sheet.change_column_width(8, 25)
 
-    repays = Repay.all.select{|o| o.repay_date.month == report_date.month }
+    repays = Repay.all.select{|o| o.repay_date.try(:month) == report_date.month }
 
     repays.each.with_index do |repay, index|
       repay_sheet.add_cell(6 + index, 3, repay.customer_phone)
       repay_sheet.add_cell(6 + index, 4, repay.product_code)
-      repay_sheet.add_cell(6 + index, 5, repay.sent_date.strftime('%d/%m'))
-      repay_sheet.add_cell(6 + index, 6, repay.repay_date.strftime('%d/%m'))
+      repay_sheet.add_cell(6 + index, 5, repay.sent_date.try(:strftime, '%d/%m'))
+      repay_sheet.add_cell(6 + index, 6, repay.repay_date.try(:strftime, '%d/%m'))
       repay_sheet.add_cell(6 + index, 7, repay.order_colors.map(&:quantity).try(:sum))
       repay_sheet.add_cell(6 + index, 8, repay.product_status)
       repay_sheet.add_cell(6 + index, 9, repay.colors_to_s)
@@ -591,14 +673,14 @@ class ExcelHandler
     end
 
     # BaloMonthlySheet
-    (0..12).each do |col|
+    (0..16).each do |col|
       balo_monthly_sheet.change_column_font_size(col, 12)
       balo_monthly_sheet.change_column_font_name(col, 'Times New Roman')
       balo_monthly_sheet.change_column_width(col, 15)
     end
 
     balo_monthly_sheet.add_cell(3, 1, "Thông tin khách hàng".upcase)
-    balo_monthly_sheet.merge_cells(3, 1, 3, 9)
+    balo_monthly_sheet.merge_cells(3, 1, 3, 12)
     balo_monthly_sheet.change_row_height(3, 24)
     balo_monthly_sheet.sheet_data[3][1].change_fill('f4a466')
     balo_monthly_sheet.sheet_data[3][1].change_horizontal_alignment('center')
@@ -652,12 +734,28 @@ class ExcelHandler
     balo_monthly_sheet.sheet_data[4][9].change_horizontal_alignment('center')
     balo_monthly_sheet.sheet_data[4][9].change_vertical_alignment('center')
     balo_monthly_sheet.sheet_data[4][9].change_font_bold(true)
+    # Add more
+    balo_monthly_sheet.add_cell(4, 10, "Gmail")
+    balo_monthly_sheet.sheet_data[4][10].change_fill('f48630')
+    balo_monthly_sheet.sheet_data[4][10].change_horizontal_alignment('center')
+    balo_monthly_sheet.sheet_data[4][10].change_vertical_alignment('center')
+    balo_monthly_sheet.sheet_data[4][10].change_font_bold(true)
+    balo_monthly_sheet.add_cell(4, 11, "Ngày sinh")
+    balo_monthly_sheet.sheet_data[4][11].change_fill('f48630')
+    balo_monthly_sheet.sheet_data[4][11].change_horizontal_alignment('center')
+    balo_monthly_sheet.sheet_data[4][11].change_vertical_alignment('center')
+    balo_monthly_sheet.sheet_data[4][11].change_font_bold(true)
+    balo_monthly_sheet.add_cell(4, 12, "Địa điểm nhận")
+    balo_monthly_sheet.sheet_data[4][12].change_fill('f48630')
+    balo_monthly_sheet.sheet_data[4][12].change_horizontal_alignment('center')
+    balo_monthly_sheet.sheet_data[4][12].change_vertical_alignment('center')
+    balo_monthly_sheet.sheet_data[4][12].change_font_bold(true)
 
     balo_monthly_sheet.change_column_width(2, 25)
     balo_monthly_sheet.change_column_width(5, 20)
     balo_monthly_sheet.change_column_width(9, 25)
 
-    balo_orders = Order.balo.select{|o| o.sent_date.month == report_date.month }
+    balo_orders = Order.balo.select{|o| o.sent_date.try(:month) == report_date.month }
 
     balo_orders.each.with_index do |order, index|
       balo_monthly_sheet.add_cell(5 + index, 1, index + 1)
@@ -667,13 +765,16 @@ class ExcelHandler
       balo_monthly_sheet.add_cell(5 + index, 5, order.customer_phone)
       balo_monthly_sheet.add_cell(5 + index, 6, order.product_cost)
       balo_monthly_sheet.add_cell(5 + index, 7, order.ship_cost)
-      balo_monthly_sheet.add_cell(5 + index, 8, order.sent_date.strftime('%d/%m'))
+      balo_monthly_sheet.add_cell(5 + index, 8, order.sent_date.try(:strftime, '%d/%m'))
       balo_monthly_sheet.add_cell(5 + index, 9, order.colors_to_s)
+      balo_monthly_sheet.add_cell(5 + index, 10, order.customer_email)
+      balo_monthly_sheet.add_cell(5 + index, 11, order.customer_birthday.try(:strftime, '%d/%m'))
+      balo_monthly_sheet.add_cell(5 + index, 12, order.customer_address)
     end
 
     (balo_orders.count + 8).times do |row|
       balo_monthly_sheet.change_row_height(row, 24)
-      12.times do |col|
+      16.times do |col|
         balo_monthly_sheet.sheet_data[row][col].try(:change_border, :top, 'thin')
         balo_monthly_sheet.sheet_data[row][col].try(:change_border, :bottom, 'thin')
         balo_monthly_sheet.sheet_data[row][col].try(:change_border, :left, 'thin')
@@ -682,14 +783,14 @@ class ExcelHandler
     end
 
     # PurgeMonthlySheet
-    (0..12).each do |col|
+    (0..16).each do |col|
       purge_monthly_sheet.change_column_font_size(col, 12)
       purge_monthly_sheet.change_column_font_name(col, 'Times New Roman')
       purge_monthly_sheet.change_column_width(col, 15)
     end
 
     purge_monthly_sheet.add_cell(3, 1, "Thông tin khách hàng".upcase)
-    purge_monthly_sheet.merge_cells(3, 1, 3, 9)
+    purge_monthly_sheet.merge_cells(3, 1, 3, 12)
     purge_monthly_sheet.change_row_height(3, 24)
     purge_monthly_sheet.sheet_data[3][1].change_fill('f4a466')
     purge_monthly_sheet.sheet_data[3][1].change_horizontal_alignment('center')
@@ -743,12 +844,28 @@ class ExcelHandler
     purge_monthly_sheet.sheet_data[4][9].change_horizontal_alignment('center')
     purge_monthly_sheet.sheet_data[4][9].change_vertical_alignment('center')
     purge_monthly_sheet.sheet_data[4][9].change_font_bold(true)
+    # Add more
+    purge_monthly_sheet.add_cell(4, 10, "Gmail")
+    purge_monthly_sheet.sheet_data[4][10].change_fill('f48630')
+    purge_monthly_sheet.sheet_data[4][10].change_horizontal_alignment('center')
+    purge_monthly_sheet.sheet_data[4][10].change_vertical_alignment('center')
+    purge_monthly_sheet.sheet_data[4][10].change_font_bold(true)
+    purge_monthly_sheet.add_cell(4, 11, "Ngày sinh")
+    purge_monthly_sheet.sheet_data[4][11].change_fill('f48630')
+    purge_monthly_sheet.sheet_data[4][11].change_horizontal_alignment('center')
+    purge_monthly_sheet.sheet_data[4][11].change_vertical_alignment('center')
+    purge_monthly_sheet.sheet_data[4][11].change_font_bold(true)
+    purge_monthly_sheet.add_cell(4, 12, "Địa điểm nhận")
+    purge_monthly_sheet.sheet_data[4][12].change_fill('f48630')
+    purge_monthly_sheet.sheet_data[4][12].change_horizontal_alignment('center')
+    purge_monthly_sheet.sheet_data[4][12].change_vertical_alignment('center')
+    purge_monthly_sheet.sheet_data[4][12].change_font_bold(true)
 
     purge_monthly_sheet.change_column_width(2, 25)
     purge_monthly_sheet.change_column_width(5, 20)
     purge_monthly_sheet.change_column_width(9, 25)
 
-    purge_orders = Order.purge.select{|o| o.sent_date.month == report_date.month }
+    purge_orders = Order.purge.select{|o| o.sent_date.try(:month) == report_date.month }
 
     purge_orders.each.with_index do |order, index|
       purge_monthly_sheet.add_cell(5 + index, 1, index + 1)
@@ -758,13 +875,16 @@ class ExcelHandler
       purge_monthly_sheet.add_cell(5 + index, 5, order.customer_phone)
       purge_monthly_sheet.add_cell(5 + index, 6, order.product_cost)
       purge_monthly_sheet.add_cell(5 + index, 7, order.ship_cost)
-      purge_monthly_sheet.add_cell(5 + index, 8, order.sent_date.strftime('%d/%m'))
+      purge_monthly_sheet.add_cell(5 + index, 8, order.sent_date.try(:strftime, '%d/%m'))
       purge_monthly_sheet.add_cell(5 + index, 9, order.colors_to_s)
+      purge_monthly_sheet.add_cell(5 + index, 10, order.customer_email)
+      purge_monthly_sheet.add_cell(5 + index, 11, order.customer_birthday.try(:strftime, '%d/%m'))
+      purge_monthly_sheet.add_cell(5 + index, 12, order.customer_address)
     end
 
     (purge_orders.count + 8).times do |row|
       purge_monthly_sheet.change_row_height(row, 24)
-      12.times do |col|
+      16.times do |col|
         purge_monthly_sheet.sheet_data[row][col].try(:change_border, :top, 'thin')
         purge_monthly_sheet.sheet_data[row][col].try(:change_border, :bottom, 'thin')
         purge_monthly_sheet.sheet_data[row][col].try(:change_border, :left, 'thin')

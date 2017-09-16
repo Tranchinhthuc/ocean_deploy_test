@@ -44,11 +44,9 @@ class Repay < ApplicationRecord
     end
   end
 
-  private
   def update_product_info
     product = Product.find_by(code: product_code)
     if product
-      product.update(remain_quantity: order_colors.map(&:quantity).try(:sum) + product.remain_quantity)
       product_order_colors = product.order_colors
       import_order_colors = order_colors
       order_colors.each do |order_color|

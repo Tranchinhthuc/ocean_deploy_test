@@ -34,6 +34,7 @@ class ImportOrdersController < ApplicationController
     @import_order = ImportOrder.new(import_order_params)
     respond_to do |format|
       if @import_order.save
+        @import_order.update_product_info
         format.html { redirect_to import_orders_path, notice: 'Import order was successfully created.' }
         format.json { render :show, status: :created, location: @import_order }
       else

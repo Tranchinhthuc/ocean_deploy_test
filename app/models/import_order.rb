@@ -44,7 +44,6 @@ class ImportOrder < ApplicationRecord
     end
   end
 
-  private
   def update_product_info
     product = Product.find_by(code: product_code)
     if product

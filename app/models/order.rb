@@ -9,8 +9,6 @@ class Order < ApplicationRecord
 
   accepts_nested_attributes_for :order_colors, allow_destroy: true, reject_if: proc { |attributes| attributes['quantity'].blank? }
 
-  after_create :update_product_info
-
   def self.product_type_to_s(product_type)
     case product_type
     when :balo

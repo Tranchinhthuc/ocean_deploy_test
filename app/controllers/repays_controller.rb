@@ -34,6 +34,7 @@ class RepaysController < ApplicationController
     @repay = Repay.new(repay_params)
     respond_to do |format|
       if @repay.save
+        @repay.update_product_info
         format.html { redirect_to repays_path, notice: 'Import order was successfully created.' }
         format.json { render :show, status: :created, location: @repay }
       else
